@@ -1,0 +1,23 @@
+# Robots.txt for Sacred Beads
+# https://sacredbeads-tasbih.netlify.app/robots.txt
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin.html
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://sacredbeads-tasbih.netlify.app/sitemap.xml
+
+# Crawl-delay (optional, be nice to servers)
+Crawl-delay: 1
+
+# Block specific bots if needed (uncomment to use)
+# User-agent: AhrefsBot
+# Disallow: /
+
+# User-agent: SemrushBot
+# Disallow: /
