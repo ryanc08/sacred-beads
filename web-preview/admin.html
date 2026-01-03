@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Sacred Beads</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #1a5f5a;
+            --color-primary-dark: #0f3d3a;
+            --color-accent: #c9a962;
+            --color-danger: #dc3545;
+            --color-success: #28a745;
+            --color-cream: #f7f3eb;
+            --color-text: #2d2a26;
+            --color-text-light: #5c5650;
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--color-cream);
+            color: var(--color-text);
+            min-height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-primary) 0%, #722f37 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-logo {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--color-text-light);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: var(--color-text);
+        }
+
+        .btn-danger {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .login-error {
+            color: var(--color-danger);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .login-hint {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        /* Header */
+        .admin-header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .admin-logo span {
+            color: var(--color-accent);
+        }
+
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-cream);
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        /* Main Content */
+        .admin-main {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-subtitle {
+            color: var(--color-text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* Products Section */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-admin-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-admin-image {
+            height: 200px;
+            background: linear-gradient(135deg, #d4a86a 0%, #8b5a2b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .product-admin-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-admin-image .edit-image-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .product-admin-body {
+            padding: 1.5rem;
+        }
+
+        .product-admin-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-admin-material {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+        }
+
+        .product-admin-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .product-admin-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .product-admin-actions .btn {
+            flex: 1;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 150px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-placeholder {
+            color: var(--color-text-light);
+            font-size: 0.875rem;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 1rem 1.5rem;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            color: var(--color-primary);
+        }
+
+        /* Category badge */
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--color-cream);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: capitalize;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Add product card */
+        .add-product-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-product-card:hover {
+            border-color: var(--color-primary);
+            background: rgba(26, 95, 90, 0.05);
+        }
+
+        .add-product-content {
+            text-align: center;
+            color: var(--color-text-light);
+        }
+
+        .add-product-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Form select */
+        .form-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="login-screen">
+        <div class="login-card">
+            <div class="login-logo">☽</div>
+            <h1 class="login-title">Admin Login</h1>
+            <p class="login-subtitle">Sacred Beads Dashboard</p>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="password">Admin Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+                <p class="login-error" id="login-error">Incorrect password. Please try again.</p>
+            </form>
+
+            <div class="login-hint">
+                <strong>First time?</strong> Default password is: <code>sacred2026</code><br>
+                You can change this in the settings after login.
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header class="admin-header">
+            <div class="admin-logo">
+                ☽ Sacred<span>Beads</span> Admin
+            </div>
+            <nav class="admin-nav">
+                <a href="index.html" class="btn btn-secondary btn-sm" target="_blank">View Store</a>
+                <div class="admin-user">
+                    👤 Admin
+                </div>
+                <button class="btn btn-secondary btn-sm" id="logout-btn">Logout</button>
+            </nav>
+        </header>
+
+        <main class="admin-main">
+            <a href="index.html" class="back-link">← Back to Store</a>
+
+            <h1 class="admin-title">Product Management</h1>
+            <p class="admin-subtitle">Add, edit, or remove products from your store</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Products</div>
+                    <div class="stat-value" id="stat-products">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Categories</div>
+                    <div class="stat-value" id="stat-categories">4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Price Range</div>
+                    <div class="stat-value" id="stat-price">$0</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2 class="section-title">All Products</h2>
+            </div>
+
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be rendered here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Edit Product</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+
+                    <div class="image-preview" id="image-preview">
+                        <span class="image-preview-placeholder">No image selected</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-image">Image URL</label>
+                        <input type="url" id="product-image" placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-name">Product Name *</label>
+                        <input type="text" id="product-name" placeholder="e.g., Baltic Amber Tasbih" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-material">Material / Description</label>
+                        <input type="text" id="product-material" placeholder="e.g., 33 Beads • Genuine Baltic Amber">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-price">Price ($) *</label>
+                        <input type="number" id="product-price" placeholder="199" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-category">Category</label>
+                        <select id="product-category">
+                            <option value="amber">Amber</option>
+                            <option value="wood">Olive Wood</option>
+                            <option value="agate">Agate</option>
+                            <option value="crystal">Crystal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-badge">Badge (optional)</label>
+                        <select id="product-badge">
+                            <option value="">None</option>
+                            <option value="Bestseller">Bestseller</option>
+                            <option value="New">New</option>
+                            <option value="Limited">Limited</option>
+                            <option value="Sale">Sale</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="modal-save">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================================================
+        // Admin Dashboard - Product Management System
+        // ==========================================================================
+
+        // Default products (will be overwritten by localStorage if exists)
+        const defaultProducts = [
+            {
+                id: '1',
+                name: 'Baltic Amber Tasbih',
+                material: '33 Beads • Genuine Baltic Amber',
+                price: 189,
+                category: 'amber',
+                badge: 'Bestseller',
+                image: ''
+            },
+            {
+                id: '2',
+                name: 'Jerusalem Olive Wood',
+                material: '99 Beads • Hand-Carved Olive',
+                price: 79,
+                category: 'wood',
+                badge: '',
+                image: ''
+            },
+            {
+                id: '3',
+                name: 'Yemeni Aqeeq Misbaha',
+                material: '33 Beads • Natural Red Agate',
+                price: 245,
+                category: 'agate',
+                badge: 'New',
+                image: ''
+            },
+            {
+                id: '4',
+                name: 'Rose Quartz Serenity',
+                material: '33 Beads • Brazilian Rose Quartz',
+                price: 165,
+                category: 'crystal',
+                badge: '',
+                image: ''
+            },
+            {
+                id: '5',
+                name: 'Cognac Amber Master',
+                material: '99 Beads • Premium Cognac Amber',
+                price: 325,
+                category: 'amber',
+                badge: '',
+                image: ''
+            },
+            {
+                id: '6',
+                name: 'Mysore Sandalwood',
+                material: '33 Beads • Aromatic Indian Sandalwood',
+                price: 210,
+                category: 'wood',
+                badge: 'Limited',
+                image: ''
+            }
+        ];
+
+        // State
+        let products = [];
+        let editingProductId = null;
+        const ADMIN_PASSWORD = localStorage.getItem('adminPassword') || 'sacred2026';
+
+        // DOM Elements
+        const loginScreen = document.getElementById('login-screen');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const logoutBtn = document.getElementById('logout-btn');
+        const productsGrid = document.getElementById('products-grid');
+        const editModal = document.getElementById('edit-modal');
+        const productForm = document.getElementById('product-form');
+        const imagePreview = document.getElementById('image-preview');
+        const imageInput = document.getElementById('product-image');
+
+        // ======================================================================
+        // Authentication
+        // ======================================================================
+
+        function checkAuth() {
+            const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+            if (isLoggedIn) {
+                showDashboard();
+            }
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                showDashboard();
+            } else {
+                loginError.style.display = 'block';
+                document.getElementById('password').value = '';
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('adminLoggedIn');
+            loginScreen.classList.remove('hidden');
+            dashboard.classList.remove('active');
+            document.getElementById('password').value = '';
+        });
+
+        function showDashboard() {
+            loginScreen.classList.add('hidden');
+            dashboard.classList.add('active');
+            loadProducts();
+            renderProducts();
+            updateStats();
+        }
+
+        // ======================================================================
+        // Product Management
+        // ======================================================================
+
+        function loadProducts() {
+            const saved = localStorage.getItem('sacredBeadsProducts');
+            if (saved) {
+                products = JSON.parse(saved);
+            } else {
+                products = [...defaultProducts];
+                saveProducts();
+            }
+        }
+
+        function saveProducts() {
+            localStorage.setItem('sacredBeadsProducts', JSON.stringify(products));
+        }
+
+        function renderProducts() {
+            const categoryColors = {
+                amber: 'linear-gradient(135deg, #f5e6c8 0%, #d4a86a 50%, #c49a5e 100%)',
+                wood: 'linear-gradient(135deg, #dcc5a9 0%, #8b6914 50%, #6d5a28 100%)',
+                agate: 'linear-gradient(135deg, #f5d5d5 0%, #a53030 50%, #722f37 100%)',
+                crystal: 'linear-gradient(135deg, #f8e8eb 0%, #e8b4be 50%, #d4909d 100%)'
+            };
+
+            productsGrid.innerHTML = products.map(product => `
+                <div class="product-admin-card" data-id="${product.id}">
+                    <div class="product-admin-image" style="background: ${product.image ? 'none' : categoryColors[product.category] || categoryColors.amber}">
+                        ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '📿'}
+                        <button class="edit-image-btn" onclick="openEditModal('${product.id}')">Change Image</button>
+                    </div>
+                    <div class="product-admin-body">
+                        <span class="category-badge">${product.category}</span>
+                        ${product.badge ? `<span class="category-badge" style="background: var(--color-primary); color: white;">${product.badge}</span>` : ''}
+                        <h3 class="product-admin-name">${product.name}</h3>
+                        <p class="product-admin-material">${product.material}</p>
+                        <div class="product-admin-price">$${product.price}</div>
+                        <div class="product-admin-actions">
+                            <button class="btn btn-primary btn-sm" onclick="openEditModal('${product.id}')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteProduct('${product.id}')">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') + `
+                <div class="add-product-card" onclick="openAddModal()">
+                    <div class="add-product-content">
+                        <div class="add-product-icon">+</div>
+                        <div>Add New Product</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateStats() {
+            document.getElementById('stat-products').textContent = products.length;
+            const categories = [...new Set(products.map(p => p.category))];
+            document.getElementById('stat-categories').textContent = categories.length;
+            const prices = products.map(p => p.price);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            document.getElementById('stat-price').textContent = `$${minPrice}-$${maxPrice}`;
+        }
+
+        // ======================================================================
+        // Modal Functions
+        // ======================================================================
+
+        function openEditModal(productId) {
+            editingProductId = productId;
+            const product = products.find(p => p.id === productId);
+
+            if (product) {
+                document.getElementById('modal-title').textContent = 'Edit Product';
+                document.getElementById('product-id').value = product.id;
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-material').value = product.material;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-category').value = product.category;
+                document.getElementById('product-badge').value = product.badge || '';
+                document.getElementById('product-image').value = product.image || '';
+
+                updateImagePreview(product.image);
+            }
+
+            editModal.classList.add('active');
+        }
+
+        function openAddModal() {
+            editingProductId = null;
+            document.getElementById('modal-title').textContent = 'Add New Product';
+            productForm.reset();
+            updateImagePreview('');
+            editModal.classList.add('active');
+        }
+
+        function closeModal() {
+            editModal.classList.remove('active');
+            editingProductId = null;
+        }
+
+        function updateImagePreview(url) {
+            if (url) {
+                imagePreview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='<span class=\\'image-preview-placeholder\\'>Invalid image URL</span>'">`;
+            } else {
+                imagePreview.innerHTML = '<span class="image-preview-placeholder">No image selected</span>';
+            }
+        }
+
+        imageInput.addEventListener('input', (e) => {
+            updateImagePreview(e.target.value);
+        });
+
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('modal-cancel').addEventListener('click', closeModal);
+
+        document.getElementById('modal-save').addEventListener('click', () => {
+            const name = document.getElementById('product-name').value.trim();
+            const material = document.getElementById('product-material').value.trim();
+            const price = parseInt(document.getElementById('product-price').value, 10);
+            const category = document.getElementById('product-category').value;
+            const badge = document.getElementById('product-badge').value;
+            const image = document.getElementById('product-image').value.trim();
+
+            if (!name || !price) {
+                showNotification('Please fill in required fields', 'error');
+                return;
+            }
+
+            if (editingProductId) {
+                // Update existing product
+                const index = products.findIndex(p => p.id === editingProductId);
+                if (index !== -1) {
+                    products[index] = {
+                        ...products[index],
+                        name,
+                        material,
+                        price,
+                        category,
+                        badge,
+                        image
+                    };
+                }
+                showNotification('Product updated successfully!');
+            } else {
+                // Add new product
+                const newProduct = {
+                    id: Date.now().toString(),
+                    name,
+                    material,
+                    price,
+                    category,
+                    badge,
+                    image
+                };
+                products.push(newProduct);
+                showNotification('Product added successfully!');
+            }
+
+            saveProducts();
+            renderProducts();
+            updateStats();
+            closeModal();
+        });
+
+        // ======================================================================
+        // Delete Product
+        // ======================================================================
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== productId);
+                saveProducts();
+                renderProducts();
+                updateStats();
+                showNotification('Product deleted');
+            }
+        }
+
+        // ======================================================================
+        // Notifications
+        // ======================================================================
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.background = type === 'error' ? 'var(--color-danger)' : 'var(--color-primary)';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 2500);
+        }
+
+        // ======================================================================
+        // Make functions globally available
+        // ======================================================================
+        window.openEditModal = openEditModal;
+        window.openAddModal = openAddModal;
+        window.deleteProduct = deleteProduct;
+
+        // ======================================================================
+        // Initialize
+        // ======================================================================
+        checkAuth();
+    </script>
+</body>
+
+</html>
